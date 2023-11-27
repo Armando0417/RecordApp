@@ -7,8 +7,7 @@ public class Specimen {
     public static class SpecimenIDComparator implements Comparator<Specimen> {
         @Override
         public int compare(Specimen specimen1, Specimen specimen2) {
-            // Compare specimens based on their IDs
-            return Integer.compare(specimen1.getID(), specimen2.getID());
+            return 1;
         }
 
     }
@@ -21,8 +20,6 @@ public class Specimen {
 
         }
     }
-
-
 
     public static class Date{
         private int day;
@@ -79,42 +76,22 @@ public class Specimen {
     public String phone;
     public Date dateTaken;
 
-    private int ID;
-
     Specimen(String n, String phone, Date date){
         this.name = n;
         this.phone = phone;
         this.dateTaken = date;
-        this.ID = -1;
     }
 
     Specimen() {
         this.name = "";
         this.phone = "";
         this.dateTaken = null;
-        this.ID = -1;
     }
 
-    String WhoIsThis(){
-        return name + phone + dateTaken.getDate();
-    }
+    String getName() { return this.name; }
+    String getPhone() { return this.phone; }
 
-    void printSpecimen(){
-        System.out.println( "this is: {" + name + ", " + phone + ", " + dateTaken.getDate() + " }" );
-    }
-
-    public int getID(){
-        return this.ID;
-    }
-
-    public void setID(int id){
-        this.ID = id;
-    }
-
-
-
-
-
+    String getDate() { return this.dateTaken.getDate(); }
 
 }
 

@@ -1,7 +1,5 @@
 package com.example.pedroresearch;
 
-import static android.os.Environment.getExternalStorageDirectory;
-
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,9 +26,9 @@ public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
     private ArrayList<Specimen> listOfPeople;
+
+    private DataSourceManager dataBase;
     SharedViewModel viewModel;
-
-
 
 
     @Override
@@ -40,6 +38,8 @@ public class SecondFragment extends Fragment {
     ) {
 
         binding = FragmentSecondBinding.inflate(inflater, container, false);
+        dataBase = new DataSourceManager(requireContext());
+
         listOfPeople = new ArrayList<>();
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class); //Shared ArrayLis
 
@@ -50,7 +50,7 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        listOfPeople = (ArrayList<Specimen>) DataStorageUtil.loadPeopleList(requireContext());
+        listOfPeople = (ArrayList<Specimen>) dataBase.getAllPeople();
 
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,17 +61,10 @@ public class SecondFragment extends Fragment {
                 String date = Objects.requireNonNull(binding.dateInput.getEditText()).getText().toString();
                 Specimen.Date dateTaken = new Specimen.Date(date);
 
-                // Ensure listOfPeople is initialized (possibly in onCreateView)
-                if (listOfPeople == null) {
-                    listOfPeople = new ArrayList<>();
-                }
-
                 // Create a new Specimen object and add it to the list
                 Specimen specimen = new Specimen(name, phone, dateTaken);
-                listOfPeople.add(specimen);
 
-                // Save the updated list to the file
-                DataStorageUtil.savePeopleList(requireContext(), listOfPeople);
+                dataBase.addPerson(specimen);
 
                 // Update the ViewModel with the new list of specimens
                 viewModel.setElementList(listOfPeople);
@@ -80,6 +73,8 @@ public class SecondFragment extends Fragment {
                 clearInputFields();
             }
         });
+
+
 
         binding.changeStateButton.setOnClickListener(new View.OnClickListener(){
             @Override
